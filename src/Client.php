@@ -3,15 +3,18 @@
 namespace Laravel\Passport;
 
 use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class Client extends Model
+
+class Client extends Eloquent
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'oauth_clients';
+    //protected $table = 'oauth_clients';
+    protected $collection = 'oauth_clients';
 
     /**
      * The guarded attributes on the model.
@@ -35,7 +38,6 @@ class Client extends Model
      * @var array
      */
     protected $casts = [
-        'grant_types' => 'array',
         'personal_access_client' => 'bool',
         'password_client' => 'bool',
         'revoked' => 'bool',
@@ -48,7 +50,7 @@ class Client extends Model
      */
     public function authCodes()
     {
-        return $this->hasMany(Passport::authCodeModel(), 'client_id');
+        return $this->hasMany(AuthCode::class, 'client_id');
     }
 
     /**
@@ -58,7 +60,7 @@ class Client extends Model
      */
     public function tokens()
     {
-        return $this->hasMany(Passport::tokenModel(), 'client_id');
+        return $this->hasMany(Token::class, 'client_id');
     }
 
     /**

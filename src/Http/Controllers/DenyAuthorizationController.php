@@ -38,13 +38,11 @@ class DenyAuthorizationController
     {
         $authRequest = $this->getAuthRequestFromSession($request);
 
-        $clientUris = Arr::wrap($authRequest->getClient()->getRedirectUri());
-
-        if (! in_array($uri = $authRequest->getRedirectUri(), $clientUris)) {
-            $uri = Arr::first($clientUris);
+        if (is_array($uri = $authRequest->getClient()->getRedirectUri())) {
+            $uri = Arr::first($uri);
         }
 
-        $separator = $authRequest->getGrantTypeId() === 'implicit' ? '#' : (strstr($uri, '?') ? '&' : '?');
+        $separator = $authRequest->getGrantTypeId() === 'implicit' ? '#' : '?';
 
         return $this->response->redirectTo(
             $uri.$separator.'error=access_denied&state='.$request->input('state')

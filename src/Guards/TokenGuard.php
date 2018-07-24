@@ -2,11 +2,14 @@
 
 namespace Laravel\Passport\Guards;
 
+use App\User;
+use Carbon\Carbon;
 use Exception;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Laravel\Passport\Passport;
 use Illuminate\Container\Container;
+use Laravel\Passport\Token;
 use Laravel\Passport\TransientToken;
 use Laravel\Passport\TokenRepository;
 use Laravel\Passport\ClientRepository;
@@ -70,6 +73,7 @@ class TokenGuard
                                 ClientRepository $clients,
                                 Encrypter $encrypter)
     {
+
         $this->server = $server;
         $this->tokens = $tokens;
         $this->clients = $clients;
@@ -81,6 +85,7 @@ class TokenGuard
      * Get the user for the incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return mixed
      */
     public function user(Request $request)
@@ -100,13 +105,17 @@ class TokenGuard
      */
     protected function authenticateViaBearerToken($request)
     {
+
         // First, we will convert the Symfony request to a PSR-7 implementation which will
         // be compatible with the base OAuth2 library. The Symfony bridge can perform a
         // conversion for us to a Zend Diactoros implementation of the PSR-7 request.
         $psr = (new DiactorosFactory)->createRequest($request);
 
         try {
+
             $psr = $this->server->validateAuthenticatedRequest($psr);
+
+
 
             // If the access token is valid we will retrieve the user according to the user ID
             // associated with the token. We will use the provider implementation which may
@@ -125,7 +134,6 @@ class TokenGuard
             $token = $this->tokens->find(
                 $psr->getAttribute('oauth_access_token_id')
             );
-
             $clientId = $psr->getAttribute('oauth_client_id');
 
             // Finally, we will verify if the client that issued this token is still valid and
@@ -135,11 +143,12 @@ class TokenGuard
                 return;
             }
 
+            /*if (Carbon::now()->greaterThan($token['expires_at']))
+                return;*/
+
             return $token ? $user->withAccessToken($token) : null;
         } catch (OAuthServerException $e) {
-            $request->headers->set( 'Authorization', '', true );
-
-            Container::getInstance()->make(
+            return Container::getInstance()->make(
                 ExceptionHandler::class
             )->report($e);
         }

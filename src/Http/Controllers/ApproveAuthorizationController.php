@@ -36,6 +36,7 @@ class ApproveAuthorizationController
      */
     public function approve(Request $request)
     {
+
         return $this->withErrorHandling(function () use ($request) {
             $authRequest = $this->getAuthRequestFromSession($request);
 

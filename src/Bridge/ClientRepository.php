@@ -28,7 +28,7 @@ class ClientRepository implements ClientRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getClientEntity($clientIdentifier, $grantType = null,
+    public function getClientEntity($clientIdentifier, $grantType,
                                     $clientSecret = null, $mustValidateSecret = true)
     {
         // First, we will verify that the client exists and is authorized to create personal
@@ -64,10 +64,6 @@ class ClientRepository implements ClientRepositoryInterface
      */
     protected function handlesGrant($record, $grantType)
     {
-        if (is_array($record->grant_types) && ! in_array($grantType, $record->grant_types)) {
-            return false;
-        }
-
         switch ($grantType) {
             case 'authorization_code':
                 return ! $record->firstParty();
@@ -75,8 +71,6 @@ class ClientRepository implements ClientRepositoryInterface
                 return $record->personal_access_client;
             case 'password':
                 return $record->password_client;
-            case 'client_credentials':
-                return ! empty($record->secret);
             default:
                 return true;
         }

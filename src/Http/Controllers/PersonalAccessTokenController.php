@@ -46,6 +46,7 @@ class PersonalAccessTokenController
      */
     public function forUser(Request $request)
     {
+
         $tokens = $this->tokenRepository->forUser($request->user()->getKey());
 
         return $tokens->load('client')->filter(function ($token) {

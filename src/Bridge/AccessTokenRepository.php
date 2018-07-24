@@ -26,7 +26,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      *
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
-    protected $events;
+    private $events;
 
     /**
      * Create a new repository instance.
@@ -36,6 +36,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function __construct(TokenRepository $tokenRepository, Dispatcher $events)
     {
+
         $this->events = $events;
         $this->tokenRepository = $tokenRepository;
     }
@@ -53,6 +54,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
     {
+
         $this->tokenRepository->create([
             'id' => $accessTokenEntity->getIdentifier(),
             'user_id' => $accessTokenEntity->getUserIdentifier(),
@@ -76,6 +78,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function revokeAccessToken($tokenId)
     {
+
         $this->tokenRepository->revokeAccessToken($tokenId);
     }
 

@@ -3,15 +3,18 @@
 namespace Laravel\Passport;
 
 use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class Token extends Model
+
+class Token extends Eloquent
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'oauth_access_tokens';
+    //protected $table = 'oauth_access_tokens';
+    protected $collection = 'oauth_access_tokens';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -60,7 +63,7 @@ class Token extends Model
      */
     public function client()
     {
-        return $this->belongsTo(Passport::clientModel());
+        return $this->belongsTo(Client::class);
     }
 
     /**
@@ -71,7 +74,6 @@ class Token extends Model
     public function user()
     {
         $provider = config('auth.guards.api.provider');
-
         return $this->belongsTo(config('auth.providers.'.$provider.'.model'));
     }
 
@@ -101,11 +103,11 @@ class Token extends Model
     /**
      * Revoke the token instance.
      *
-     * @return bool
+     * @return void
      */
     public function revoke()
     {
-        return $this->forceFill(['revoked' => true])->save();
+        $this->forceFill(['revoked' => true])->save();
     }
 
     /**

@@ -71,6 +71,11 @@ class RouteRegistrar
             'uses' => 'AccessTokenController@issueToken',
             'middleware' => 'throttle',
         ]);
+        $this->router->get('/allow', [
+            'uses' => 'AccessTokenController@allow',
+            'middleware' => 'throttle',
+        ]);
+
 
         $this->router->group(['middleware' => ['web', 'auth']], function ($router) {
             $router->get('/tokens', [

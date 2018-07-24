@@ -3,8 +3,10 @@
 namespace Laravel\Passport;
 
 use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class AuthCode extends Model
+
+class AuthCode extends Eloquent
 {
     /**
      * The database table used by the model.
@@ -45,6 +47,6 @@ class AuthCode extends Model
      */
     public function client()
     {
-        return $this->belongsTo(Passport::clientModel());
+        return $this->belongsTo(Client::class);
     }
 }
