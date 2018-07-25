@@ -14,8 +14,8 @@
         }
     ],
     "repositories": {
-    "passport": {
-      "url": "https://github.com/thephpleague/oauth2-server.git",
+    "outh2-server": {
+      "url": "https://github.com/mrnaghibi/oauth2-server.git",
       "type": "vcs"
     }
   },
