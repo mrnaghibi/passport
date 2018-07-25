@@ -106,7 +106,7 @@ class PassportServiceProvider extends ServiceProvider
                 );
 
                 $server->enableGrantType(
-                    new PersonalAccessGrant, new DateInterval('P1Y')
+                    new PersonalAccessGrant, new DateInterval('P10Y')
                 );
 
                 $server->enableGrantType(
@@ -196,13 +196,17 @@ class PassportServiceProvider extends ServiceProvider
      */
     public function makeAuthorizationServer()
     {
-        return new AuthorizationServer(
+        $server = new AuthorizationServer(
             $this->app->make(Bridge\ClientRepository::class),
             $this->app->make(Bridge\AccessTokenRepository::class),
             $this->app->make(Bridge\ScopeRepository::class),
             $this->makeCryptKey('oauth-private.key'),
             app('encrypter')->getKey()
         );
+        
+        $server->setEncryptionKey(app('encrypter')->getKey());
+
+        return $server;
     }
 
     /**
