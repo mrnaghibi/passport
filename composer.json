@@ -13,12 +13,12 @@
             "email": "taylor@laravel.com"
         }
     ],
-    "repositories": {
-        "oauth2-server": {
+   "repositories": [
+         {
             "url": "https://github.com/mrnaghibi/oauth2-server.git",
             "type": "vcs"
         }
-    },
+    ],
     "require": {
         "php": ">=7.0",
         "firebase/php-jwt": "~3.0|~4.0|~5.0",
