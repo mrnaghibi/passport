@@ -38,7 +38,7 @@
     "require-dev": {
         "mockery/mockery": "~1.0",
         "phpunit/phpunit": "~6.0",
-         "league/oauth2-server": "dev-master",
+         "league/oauth2-server": "dev-master"
     },
     "autoload": {
         "psr-4": {
